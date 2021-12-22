@@ -18,6 +18,7 @@ specifiers:
   gulp-typescript: ^6.0.0-alpha.1
   gulp-uglify: ^3.0.2
   inquirer: ^8.2.0
+  is-valid-path: ^0.1.1
   listr: ^0.14.3
   osu-api-extended: ^2.0.7
   rimraf: ^3.0.2
@@ -34,6 +35,7 @@ dependencies:
   configstore: 6.0.0
   console-table-printer: 2.10.0
   inquirer: 8.2.0
+  is-valid-path: 0.1.1
   listr: 0.14.3
   osu-api-extended: 2.0.7
   terminal-link: 3.0.0
@@ -1588,6 +1590,11 @@ packages:
       is-plain-object: 2.0.4
     dev: true
 
+  /is-extglob/1.0.0:
+    resolution: {integrity: sha1-rEaBd8SUNAWgkvyPKXYMb/xiBsA=}
+    engines: {node: '>=0.10.0'}
+    dev: false
+
   /is-extglob/2.1.1:
     resolution: {integrity: sha1-qIwCU1eR8C7TfHahueqXc8gz+MI=}
     engines: {node: '>=0.10.0'}
@@ -1609,6 +1616,13 @@ packages:
     engines: {node: '>=8'}
     dev: false
 
+  /is-glob/2.0.1:
+    resolution: {integrity: sha1-0Jb5JqPe1WAPP9/ZEZjLCIjC2GM=}
+    engines: {node: '>=0.10.0'}
+    dependencies:
+      is-extglob: 1.0.0
+    dev: false
+
   /is-glob/3.1.0:
     resolution: {integrity: sha1-e6WuJCF4BKxwcHuWkiVnSGzD6Eo=}
     engines: {node: '>=0.10.0'}
@@ -1626,6 +1640,13 @@ packages:
   /is-interactive/1.0.0:
     resolution: {integrity: sha512-2HvIEKRoqS62guEC+qBjpvRubdX910WCMuJTZ+I9yvqKU2/12eSL549HMwtabb4oupdj2sMP50k+XJfB/8JE6w==}
     engines: {node: '>=8'}
+    dev: false
+
+  /is-invalid-path/0.1.0:
+    resolution: {integrity: sha1-MHqFWzzxqTi0TqcNLGEQYFNxTzQ=}
+    engines: {node: '>=0.10.0'}
+    dependencies:
+      is-glob: 2.0.1
     dev: false
 
   /is-negated-glob/1.0.0:
@@ -1709,6 +1730,13 @@ packages:
     resolution: {integrity: sha1-Kb8+/3Ab4tTTFdusw5vDn+j2Aao=}
     engines: {node: '>=0.10.0'}
     dev: true
+
+  /is-valid-path/0.1.1:
+    resolution: {integrity: sha1-EQ+f90w39mPh7HkV60UfLbk6yd8=}
+    engines: {node: '>=0.10.0'}
+    dependencies:
+      is-invalid-path: 0.1.0
+    dev: false
 
   /is-windows/1.0.2:
     resolution: {integrity: sha512-eXK1UInq2bPmjyX6e3VHIzMLobc4J94i4AWn+Hpq3OU5KkrRC96OAcR3PRJ/pGu6m8TRnBHP9dkXQVsT/COVIA==}

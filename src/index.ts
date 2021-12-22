@@ -12,7 +12,6 @@ import fs from 'fs';
 import path from 'path';
 
 // todo: cache map data for rebases
-// todo: file output
 
 const { version } = JSON.parse(
     fs.readFileSync(path.join(path.resolve(), 'package.json')).toString()
@@ -24,10 +23,22 @@ program
     .argument('<id>', "The profile's ID")
     .argument('[mode]', 'The chosen osu gamemode', 'osu')
     .option('-c, --console', 'Displays the output in the console')
+    .option('-j, --json <path>', 'Outputs all of the results as JSON')
     .description("rate a profile's chokes from its ID")
-    .action((id: string, mode: string, options) => {
+    .action(async (id: string, mode: string, options) => {
         // Default to output to the console
-        if (!options.console) options.console = true;
+        if (!options.console && !options.json) options.console = true;
+
+        if (options.json) {
+            const { default: isValidPath } = await import('is-valid-path');
+
+            // todo: maybe create folders if they do not exist?
+            if (!isValidPath(options.json) || !fs.existsSync(options.json)) {
+                return logError(
+                    `"${options.json}" is not a valid path! Please ensure that it exists, and that you have inputted it correctly!`
+                );
+            }
+        }
 
         // Ensure that the inputted user ID is numeric
         const userId = parseInt(id);
@@ -151,14 +162,14 @@ program
             ])
                 .run()
                 .then(async () => {
+                    const ranks = scores
+                        .map(score => score.rank)
+                        .filter((v, i, s) => s.indexOf(v) === i);
+
                     if (options.console) {
                         // Load dynamic modules
                         const { default: link } = await import('terminal-link');
                         const { Table } = await import('console-table-printer');
-
-                        const ranks = scores
-                            .map(score => score.rank)
-                            .filter((v, i, s) => s.indexOf(v) === i);
 
                         const sendTable = (rank: string) => {
                             const scoresOfRank = scores
@@ -189,6 +200,19 @@ program
                         if (ranks.includes('B')) sendTable('B');
                         if (ranks.includes('C')) sendTable('C');
                         if (ranks.includes('D')) sendTable('D');
+                    }
+
+                    if (options.json) {
+                        ranks.forEach(rank => {
+                            const scoresOfRank = scores
+                                .filter(s => s.rank === rank)
+                                .sort((a, b) => b.rebase - a.rebase);
+
+                            fs.writeFileSync(
+                                path.join(options.json, `${rank.toUpperCase()}.json`),
+                                JSON.stringify(scoresOfRank, null, 4)
+                            );
+                        });
                     }
                 });
         });

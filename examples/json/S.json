@@ -1,0 +1,42 @@
+[
+    {
+        "rebase": 0.08764123423312373,
+        "beatmapUrl": "https://osu.ppy.sh/b/1782778",
+        "name": "SHIORI (TV Size)",
+        "difficulty": "Expert",
+        "accuracy": 97.54385964912281,
+        "rank": "S",
+        "maxCombo": 515,
+        "combo": 514
+    },
+    {
+        "rebase": 0.06204145902547095,
+        "beatmapUrl": "https://osu.ppy.sh/b/1453152",
+        "name": "サクラミツツキ",
+        "difficulty": "Petal",
+        "accuracy": 98.44961240310077,
+        "rank": "S",
+        "maxCombo": 505,
+        "combo": 505
+    },
+    {
+        "rebase": 0.058529016765792766,
+        "beatmapUrl": "https://osu.ppy.sh/b/1786111",
+        "name": "GET BACK",
+        "difficulty": "Reform's Expert",
+        "accuracy": 98.36199836199836,
+        "rank": "S",
+        "maxCombo": 608,
+        "combo": 607
+    },
+    {
+        "rebase": 0.016816247438605318,
+        "beatmapUrl": "https://osu.ppy.sh/b/2545340",
+        "name": "メルト 10th ANNIVERSARY MIX",
+        "difficulty": "I won't fall for love, not me",
+        "accuracy": 98.60973187686196,
+        "rank": "S",
+        "maxCombo": 1488,
+        "combo": 1487
+    }
+]

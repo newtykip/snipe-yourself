@@ -33,6 +33,7 @@
         "configstore": "^6.0.0",
         "console-table-printer": "^2.10.0",
         "inquirer": "^8.2.0",
+        "is-valid-path": "^0.1.1",
         "listr": "^0.14.3",
         "osu-api-extended": "^2.0.7",
         "terminal-link": "^3.0.0"

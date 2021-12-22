@@ -1,0 +1,142 @@
+[
+    {
+        "rebase": 0.12633419848032296,
+        "beatmapUrl": "https://osu.ppy.sh/b/735272",
+        "name": "海色 vs. アイのシナリオ",
+        "difficulty": "Tatoe",
+        "accuracy": 96.7551622418879,
+        "rank": "A",
+        "maxCombo": 481,
+        "combo": 477
+    },
+    {
+        "rebase": 0.09640106819295029,
+        "beatmapUrl": "https://osu.ppy.sh/b/914237",
+        "name": "RUN!RUN!RUN!",
+        "difficulty": "Water Board",
+        "accuracy": 97.42002063983489,
+        "rank": "A",
+        "maxCombo": 376,
+        "combo": 367
+    },
+    {
+        "rebase": 0.0893592419279094,
+        "beatmapUrl": "https://osu.ppy.sh/b/2465106",
+        "name": "IGNITE (TV Size)",
+        "difficulty": "Reform's PHANTOM BULLET",
+        "accuracy": 98.23584029712164,
+        "rank": "A",
+        "maxCombo": 489,
+        "combo": 485
+    },
+    {
+        "rebase": 0.08828535820587063,
+        "beatmapUrl": "https://osu.ppy.sh/b/1586059",
+        "name": "ディアブレイブ",
+        "difficulty": "Bravery",
+        "accuracy": 97.88797061524335,
+        "rank": "A",
+        "maxCombo": 499,
+        "combo": 426
+    },
+    {
+        "rebase": 0.046134724516329835,
+        "beatmapUrl": "https://osu.ppy.sh/b/1396072",
+        "name": "Interlude",
+        "difficulty": "Insane",
+        "accuracy": 98.67021276595744,
+        "rank": "A",
+        "maxCombo": 561,
+        "combo": 455
+    },
+    {
+        "rebase": 0.040198612883390925,
+        "beatmapUrl": "https://osu.ppy.sh/b/2051808",
+        "name": "PONPONPON",
+        "difficulty": "Extreme",
+        "accuracy": 98.65591397849462,
+        "rank": "A",
+        "maxCombo": 499,
+        "combo": 475
+    },
+    {
+        "rebase": 0.03578138894265339,
+        "beatmapUrl": "https://osu.ppy.sh/b/2237465",
+        "name": "夢地図",
+        "difficulty": "A r M i N's Extra",
+        "accuracy": 98.79294336118849,
+        "rank": "A",
+        "maxCombo": 521,
+        "combo": 429
+    },
+    {
+        "rebase": 0.033711612902364296,
+        "beatmapUrl": "https://osu.ppy.sh/b/724474",
+        "name": "Lucky Star",
+        "difficulty": "Divine",
+        "accuracy": 98.26749826749827,
+        "rank": "A",
+        "maxCombo": 581,
+        "combo": 418
+    },
+    {
+        "rebase": 0.03238230591579246,
+        "beatmapUrl": "https://osu.ppy.sh/b/1800993",
+        "name": "ノンファンタジー",
+        "difficulty": "fantasy",
+        "accuracy": 98.49884526558893,
+        "rank": "A",
+        "maxCombo": 626,
+        "combo": 623
+    },
+    {
+        "rebase": 0.031639021220650626,
+        "beatmapUrl": "https://osu.ppy.sh/b/890467",
+        "name": "未来図",
+        "difficulty": "Forever",
+        "accuracy": 98.34749763928234,
+        "rank": "A",
+        "maxCombo": 968,
+        "combo": 754
+    },
+    {
+        "rebase": 0.023732187541619272,
+        "beatmapUrl": "https://osu.ppy.sh/b/2058788",
+        "name": "JUSTadICE (TV Size)",
+        "difficulty": "Extreme",
+        "accuracy": 98.87640449438202,
+        "rank": "A",
+        "maxCombo": 550,
+        "combo": 513
+    },
+    {
+        "rebase": 0.017978462501683126,
+        "beatmapUrl": "https://osu.ppy.sh/b/2632230",
+        "name": "流れ星",
+        "difficulty": "Starlight",
+        "accuracy": 97.86422578184592,
+        "rank": "A",
+        "maxCombo": 1826,
+        "combo": 1424
+    },
+    {
+        "rebase": 0.006567938391335828,
+        "beatmapUrl": "https://osu.ppy.sh/b/1582674",
+        "name": "アシンメトリー (TV Size)",
+        "difficulty": "Sotarks' Kiss",
+        "accuracy": 98.96128423040605,
+        "rank": "A",
+        "maxCombo": 484,
+        "combo": 462
+    },
+    {
+        "rebase": 0.003204358666543085,
+        "beatmapUrl": "https://osu.ppy.sh/b/1988911",
+        "name": "完璧ぐ～のね (TV Size)",
+        "difficulty": "Taeyang's Perfect Partner!",
+        "accuracy": 98.97435897435898,
+        "rank": "A",
+        "maxCombo": 511,
+        "combo": 347
+    }
+]
