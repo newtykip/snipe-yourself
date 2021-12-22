@@ -15,7 +15,6 @@ import path from 'path';
 
 // todo: cache map data for rebases
 // todo: file output
-// todo: --no-console for no table output
 
 const { version } = JSON.parse(
     fs.readFileSync(path.join(path.resolve(), 'package.json')).toString()
@@ -27,8 +26,12 @@ program
     .command('profile')
     .argument('<id>', "The profile's ID")
     .argument('[mode]', 'The chosen osu gamemode', 'osu')
+    .option('-c, --console', 'Displays the output in the console')
     .description("rate a profile's chokes from its ID")
-    .action((id: string, mode: string) => {
+    .action((id: string, mode: string, options) => {
+        // Default to output to the console
+        if (!options.console) options.console = true;
+
         // Ensure that the inputted user ID is numeric
         const userId = parseInt(id);
 
@@ -151,31 +154,35 @@ program
             ])
                 .run()
                 .then(() => {
-                    // Output as tables to the console
-                    const ranks = scores
-                        .map(score => score.rank)
-                        .filter((v, i, s) => s.indexOf(v) === i);
+                    if (options.console) {
+                        // Output as tables to the console
+                        const ranks = scores
+                            .map(score => score.rank)
+                            .filter((v, i, s) => s.indexOf(v) === i);
 
-                    ranks.forEach(rank => {
-                        const scoresOfRank = scores
-                            .filter(s => s.rank === rank)
-                            .sort((a, b) => b.rebase - a.rebase);
-                        const table = new Table();
+                        ranks.forEach(rank => {
+                            const scoresOfRank = scores
+                                .filter(s => s.rank === rank)
+                                .sort((a, b) => b.rebase - a.rebase);
+                            const table = new Table();
 
-                        console.log(chalk.bold(rankColours[rank.toUpperCase()](rank.substring(0))));
+                            console.log(
+                                chalk.bold(rankColours[rank.toUpperCase()](rank.substring(0)))
+                            );
 
-                        scoresOfRank.forEach(score =>
-                            table.addRow({
-                                'Beatmap Name': link(score.name, score.beatmapUrl),
-                                Difficulty: score.difficulty,
-                                'Rebase Value': score.rebase.toFixed(5),
-                                Combo: `${score.combo}/${score.maxCombo}`,
-                                Accuracy: `${score.accuracy.toFixed(2)}%`
-                            })
-                        );
+                            scoresOfRank.forEach(score =>
+                                table.addRow({
+                                    'Beatmap Name': link(score.name, score.beatmapUrl),
+                                    Difficulty: score.difficulty,
+                                    'Rebase Value': score.rebase.toFixed(5),
+                                    Combo: `${score.combo}/${score.maxCombo}`,
+                                    Accuracy: `${score.accuracy.toFixed(2)}%`
+                                })
+                            );
 
-                        table.printTable();
-                    });
+                            table.printTable();
+                        });
+                    }
                 });
         });
     });
