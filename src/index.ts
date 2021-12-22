@@ -5,10 +5,8 @@ import Conf from 'conf';
 import Listr from 'listr';
 import { user_data as User } from 'osu-api-extended/dist/types/v2';
 import Bluebird from 'bluebird';
-import { Table } from 'console-table-printer';
-import { rankColours, rebase, SnipeYourself, logError } from './utils.js';
+import { rankColours, rebase, SnipeYourself, logError, validModes } from './utils.js';
 import chalk from 'chalk';
-import link from 'terminal-link';
 import { Command as Commander } from 'commander';
 import fs from 'fs';
 import path from 'path';
@@ -20,7 +18,6 @@ const { version } = JSON.parse(
     fs.readFileSync(path.join(path.resolve(), 'package.json')).toString()
 );
 const program = new Commander().version(version);
-const validModes = ['osu', 'mania', 'taiko', 'fruits'];
 
 program
     .command('profile')
@@ -153,14 +150,17 @@ program
                 }
             ])
                 .run()
-                .then(() => {
+                .then(async () => {
                     if (options.console) {
-                        // Output as tables to the console
+                        // Load dynamic modules
+                        const { default: link } = await import('terminal-link');
+                        const { Table } = await import('console-table-printer');
+
                         const ranks = scores
                             .map(score => score.rank)
                             .filter((v, i, s) => s.indexOf(v) === i);
 
-                        ranks.forEach(rank => {
+                        const sendTable = (rank: string) => {
                             const scoresOfRank = scores
                                 .filter(s => s.rank === rank)
                                 .sort((a, b) => b.rebase - a.rebase);
@@ -181,7 +181,14 @@ program
                             );
 
                             table.printTable();
-                        });
+                        };
+
+                        if (ranks.includes('SH')) sendTable('SH');
+                        if (ranks.includes('S')) sendTable('S');
+                        if (ranks.includes('A')) sendTable('A');
+                        if (ranks.includes('B')) sendTable('B');
+                        if (ranks.includes('C')) sendTable('C');
+                        if (ranks.includes('D')) sendTable('D');
                     }
                 });
         });

@@ -6,6 +6,7 @@ import type {
 } from 'osu-api-extended/dist/types/v2';
 
 export const logError = (...text: any[]) => console.log(chalk.bold(chalk.red(...text)));
+export const validModes = ['osu', 'mania', 'taiko', 'fruits'];
 
 export const rankColours = {
     A: chalk.green,
