@@ -8,20 +8,26 @@ specifiers:
   '@types/node': ^17.0.2
   '@types/yargs': ^17.0.7
   bluebird: ^3.7.2
+  chalk: 4.1.2
   configstore: ^6.0.0
+  console-table-printer: ^2.10.0
   inquirer: ^8.2.0
   listr: ^0.14.3
   osu-api-extended: ^2.0.7
+  terminal-link: ^3.0.0
   ts-node: ^10.4.0
   ttypescript: ^1.5.13
   typescript: ^4.5.4
 
 dependencies:
   bluebird: 3.7.2
+  chalk: 4.1.2
   configstore: 6.0.0
+  console-table-printer: 2.10.0
   inquirer: 8.2.0
   listr: 0.14.3
   osu-api-extended: 2.0.7
+  terminal-link: 3.0.0
 
 devDependencies:
   '@types/bluebird': 3.5.36
@@ -143,6 +149,13 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       type-fest: 0.21.3
+    dev: false
+
+  /ansi-escapes/5.0.0:
+    resolution: {integrity: sha512-5GFMVX8HqE/TB+FuBJGuO5XG0WrsA6ptUqoODaT/n9mmUaZFkqnBueB4leqGBCmrUHnCnC4PCZTCd0E7QQ83bA==}
+    engines: {node: '>=12'}
+    dependencies:
+      type-fest: 1.4.0
     dev: false
 
   /ansi-regex/2.1.1:
@@ -315,6 +328,12 @@ packages:
       unique-string: 3.0.0
       write-file-atomic: 3.0.3
       xdg-basedir: 5.1.0
+    dev: false
+
+  /console-table-printer/2.10.0:
+    resolution: {integrity: sha512-7pTsysaJs1+R+OO4cCtJbl+Lr4piHYIhi7/V1qHbOg/uiYgq2yUINFgvXZtVHqm9qpW0+Uk190qkGcKvzdunvg==}
+    dependencies:
+      simple-wcswidth: 1.0.1
     dev: false
 
   /create-require/1.1.1:
@@ -814,6 +833,10 @@ packages:
     resolution: {integrity: sha512-sDl4qMFpijcGw22U5w63KmD3cZJfBuFlVNbVMKje2keoKML7X2UzWbc4XrmEbDwg0NXJc3yv4/ox7b+JWb57kQ==}
     dev: false
 
+  /simple-wcswidth/1.0.1:
+    resolution: {integrity: sha512-xMO/8eNREtaROt7tJvWJqHBDTMFN4eiQ5I4JRMuilwfnFcV5W9u7RUkueNkdw0jPqGMX36iCywelS5yilTuOxg==}
+    dev: false
+
   /slice-ansi/0.0.4:
     resolution: {integrity: sha1-7b+JA/ZvfOL46v1s7tZeJkyDGzU=}
     engines: {node: '>=0.10.0'}
@@ -891,9 +914,25 @@ packages:
       has-flag: 4.0.0
     dev: false
 
+  /supports-hyperlinks/2.2.0:
+    resolution: {integrity: sha512-6sXEzV5+I5j8Bmq9/vUphGRM/RJNT9SCURJLjwfOg51heRtguGWDzcaBlgAzKhQa0EVNpPEKzQuBwZ8S8WaCeQ==}
+    engines: {node: '>=8'}
+    dependencies:
+      has-flag: 4.0.0
+      supports-color: 7.2.0
+    dev: false
+
   /symbol-observable/1.2.0:
     resolution: {integrity: sha512-e900nM8RRtGhlV36KGEU9k65K3mPb1WV70OdjfxlG2EAuM1noi/E/BaW/uMhL7bPEssK8QV57vN3esixjUvcXQ==}
     engines: {node: '>=0.10.0'}
+    dev: false
+
+  /terminal-link/3.0.0:
+    resolution: {integrity: sha512-flFL3m4wuixmf6IfhFJd1YPiLiMuxEc8uHRM1buzIeZPm22Au2pDqBJQgdo7n1WfPU1ONFGv7YDwpFBmHGF6lg==}
+    engines: {node: '>=12'}
+    dependencies:
+      ansi-escapes: 5.0.0
+      supports-hyperlinks: 2.2.0
     dev: false
 
   /through/2.3.8:

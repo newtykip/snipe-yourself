@@ -9,6 +9,10 @@ import {
     user_scores_object as Score
 } from 'osu-api-extended/dist/types/v2';
 import Bluebird from 'bluebird';
+import { Table } from 'console-table-printer';
+import { rankColours } from './constants';
+import chalk from 'chalk';
+import url from 'terminal-link';
 
 // todo: add subcommands and rewrite module as cli
 // todo: cache map data for rebases
@@ -109,11 +113,10 @@ new Promise(async resolve => {
                             beatmapUrl: `https://osu.ppy.sh/b/${score.beatmap.id}`,
                             name: score.beatmapset.title_unicode,
                             difficulty: score.beatmap.version,
-                            acccuracy: score.accuracy * 100,
+                            accuracy: score.accuracy * 100,
                             rank: score.rank,
                             maxCombo: beatmap.max_combo,
-                            combo: score.max_combo,
-                            comboPercentage: (score.max_combo / beatmap.max_combo) * 100
+                            combo: score.max_combo
                         };
                     }
                 );
@@ -122,16 +125,39 @@ new Promise(async resolve => {
         {
             title: 'Sort the scores by rebase',
             task: () => {
+                console.log(scores.filter(s => s.accuracy === 100).length);
                 scores = scores
                     .sort((a, b) => b.rebase - a.rebase)
-                    .filter(s => s.acccuracy !== 100)
+                    .filter(s => s.accuracy !== 100)
                     .filter(s => s.rebase > 0);
             }
         }
     ])
         .run()
         .then(() => {
-            console.log(scores);
+            // Output as tables to the console
+            const ranks = scores.map(score => score.rank).filter((v, i, s) => s.indexOf(v) === i);
+
+            ranks.forEach(rank => {
+                const scoresOfRank = scores
+                    .filter(s => s.rank === rank)
+                    .sort((a, b) => b.rebase - a.rebase);
+                const table = new Table();
+
+                console.log(chalk.bold(rankColours[rank.toUpperCase()](rank.substring(0))));
+
+                scoresOfRank.forEach(score =>
+                    table.addRow({
+                        'Beatmap Name': url(score.name, score.beatmapUrl),
+                        Difficulty: score.difficulty,
+                        'Rebase Value': score.rebase.toFixed(5),
+                        Combo: `${score.combo}/${score.maxCombo}`,
+                        Accuracy: `${score.accuracy.toFixed(2)}%`
+                    })
+                );
+
+                table.printTable();
+            });
         });
 });
 
@@ -141,10 +167,9 @@ namespace SnipeYourself {
         beatmapUrl: string;
         name: string;
         difficulty: string;
-        acccuracy: number;
+        accuracy: number;
         rank: string;
         maxCombo: number;
         combo: number;
-        comboPercentage: number;
     }
 }
