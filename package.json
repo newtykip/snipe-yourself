@@ -6,7 +6,8 @@
     "description": "Generate a report of your osu! chokes to snipe them with ease!",
     "main": "build/index.js",
     "scripts": {
-        "build": "gulp"
+        "build": "gulp",
+        "dev": "tsm src/index.ts"
     },
     "repository": {
         "type": "git",
@@ -51,6 +52,7 @@
         "gulp-uglify": "^3.0.2",
         "rimraf": "^3.0.2",
         "ts-node": "^10.4.0",
+        "tsm": "^2.2.1",
         "ttypescript": "^1.5.13",
         "typescript": "^4.5.4"
     }

@@ -3,15 +3,24 @@ import { v2 as osu } from 'osu-api-extended';
 import inquirer from 'inquirer';
 import Conf from 'conf';
 import Listr from 'listr';
-import { user_data as User } from 'osu-api-extended/dist/types/v2';
-import Bluebird from 'bluebird';
-import { rankColours, rebase, SnipeYourself, logError, validModes } from './utils.js';
 import chalk from 'chalk';
-import { Command as Commander } from 'commander';
 import fs from 'fs';
 import path from 'path';
+import type { user_data as User } from 'osu-api-extended/dist/types/v2';
+import {
+    rankColours,
+    rebase,
+    SnipeYourself,
+    logError,
+    validModes,
+    logSuccess,
+    schema,
+    redactedSettings
+} from './utils.js';
+import { Command as Commander } from 'commander';
 
 // todo: cache map data for rebases
+// todo: colorise all tables
 
 const { version } = JSON.parse(
     fs.readFileSync(path.join(path.resolve(), 'package.json')).toString()
@@ -25,7 +34,7 @@ program
     .option('-c, --console', 'Displays the output in the console')
     .option('-j, --json <path>', 'Outputs all of the results as JSON')
     .description("rate a profile's chokes from its ID")
-    .action(async (id: string, mode: string, options) => {
+    .action(async (id: string, mode: string, options: { console: boolean; json: string }) => {
         // Default to output to the console
         if (!options.console && !options.json) options.console = true;
 
@@ -61,7 +70,9 @@ program
         }
 
         // Read the config store
-        const config = new Conf<SnipeYourself.Config>();
+        const config = new Conf<SnipeYourself.Config>({
+            schema
+        });
         let clientId = config.get('clientId');
         let clientSecret = config.get('clientSecret');
 
@@ -90,7 +101,7 @@ program
                 const results = await inquirer.prompt(questions);
 
                 if (results['clientId']) {
-                    clientId = results['clientId'];
+                    clientId = parseInt(results['clientId']);
                     config.set('clientId', clientId);
                 }
 
@@ -125,6 +136,8 @@ program
                 {
                     title: "Fetch the user's top plays and rebase them",
                     task: async () => {
+                        const { default: Bluebird } = await import('bluebird');
+
                         const bestScores = await osu.scores.users.best(user.id, {
                             mode: parsedMode as any,
                             limit: 100
@@ -216,6 +229,38 @@ program
                     }
                 });
         });
+    });
+
+const config = program.command('config <subcommand>').description('modify the config');
+
+config.command('list').action(async () => {
+    const config = new Conf({ schema });
+
+    // Output them
+    const { Table } = await import('console-table-printer');
+    const table = new Table();
+
+    Object.keys(config.store).forEach((k: keyof SnipeYourself.Config) => {
+        table.addRow({
+            Setting: k,
+            Value: redactedSettings.includes(k) ? '[redacted]' : config.get(k),
+            Description: schema[k].description
+        });
+    });
+
+    table.printTable();
+});
+
+// todo: view command <option> [value]
+// todo: set command <option> [value]
+
+config
+    .command('reset')
+    .description('remove all available config')
+    .action(() => {
+        const config = new Conf({ schema });
+        config.clear();
+        logSuccess('The config has been succesfully reset!');
     });
 
 program.parse();

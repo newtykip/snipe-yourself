@@ -1,12 +1,27 @@
 import chalk from 'chalk';
+import type { Schema } from 'conf/dist/source';
 import type {
     beatmaps_short_2_object as Beatmap,
     user_data as User,
     user_scores_object as Score
 } from 'osu-api-extended/dist/types/v2';
 
-export const logError = (...text: any[]) => console.log(chalk.bold(chalk.red(...text)));
+export const logError = (...text: any[]) => console.log(chalk.bold(chalk.red('✘', ...text)));
+export const logSuccess = (...text: any[]) => console.log(chalk.bold(chalk.green('✓', ...text)));
 export const validModes = ['osu', 'mania', 'taiko', 'fruits'];
+
+export const schema: Schema<SnipeYourself.Config> = {
+    clientId: {
+        type: 'number',
+        description: "Your osu! OAuth Client's ID"
+    },
+    clientSecret: {
+        type: 'string',
+        description: "Your osu! OAuth Client's secret"
+    }
+};
+
+export const redactedSettings: (keyof SnipeYourself.Config)[] = ['clientSecret'];
 
 export const rankColours = {
     A: chalk.green,
