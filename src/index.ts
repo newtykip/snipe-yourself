@@ -10,7 +10,7 @@ import {
 } from 'osu-api-extended/dist/types/v2';
 import Bluebird from 'bluebird';
 import { Table } from 'console-table-printer';
-import { rankColours } from './constants';
+import { rankColours } from './constants.js';
 import chalk from 'chalk';
 import url from 'terminal-link';
 
@@ -18,6 +18,7 @@ import url from 'terminal-link';
 // todo: cache map data for rebases
 // todo: file output
 // todo: allow for the user and mode to be configurable - atm id is hardcoded to newt
+// todo: --no-console for no table output
 
 // Read the config store
 const config = new ConfigStore('snipe-yourself', null, { globalConfigPath: true });
