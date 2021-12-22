@@ -5,6 +5,8 @@ import type {
     user_scores_object as Score
 } from 'osu-api-extended/dist/types/v2';
 
+export const logError = (...text: any[]) => console.log(chalk.bold(chalk.red(...text)));
+
 export const rankColours = {
     A: chalk.green,
     B: chalk.blue,
