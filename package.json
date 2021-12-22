@@ -28,6 +28,7 @@
     "dependencies": {
         "bluebird": "^3.7.2",
         "chalk": "4.1.2",
+        "conf": "^10.1.1",
         "configstore": "^6.0.0",
         "console-table-printer": "^2.10.0",
         "inquirer": "^8.2.0",

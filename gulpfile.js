@@ -4,7 +4,6 @@ import ts from 'gulp-typescript';
 import uglify from 'gulp-uglify';
 import rimraf from 'rimraf';
 import path from 'path';
-import concat from 'gulp-concat';
 
 gulp.task('clean', () => {
     return new Promise((resolve, reject) => {

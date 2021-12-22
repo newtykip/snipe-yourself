@@ -1,16 +1,12 @@
 #!/usr/bin/env node
 import { v2 as osu } from 'osu-api-extended';
 import inquirer from 'inquirer';
-import ConfigStore from 'configstore';
+import Conf from 'conf';
 import Listr from 'listr';
-import {
-    beatmaps_short_2_object as Beatmap,
-    user_data as User,
-    user_scores_object as Score
-} from 'osu-api-extended/dist/types/v2';
+import { user_data as User } from 'osu-api-extended/dist/types/v2';
 import Bluebird from 'bluebird';
 import { Table } from 'console-table-printer';
-import { rankColours } from './constants.js';
+import { rankColours, rebase, SnipeYourself } from './utils.js';
 import chalk from 'chalk';
 import url from 'terminal-link';
 
@@ -21,29 +17,9 @@ import url from 'terminal-link';
 // todo: --no-console for no table output
 
 // Read the config store
-const config = new ConfigStore('snipe-yourself', null, { globalConfigPath: true });
-
-let clientId: number = config.get('clientId');
-let clientSecret: string = config.get('clientSecret');
-
-const rebase = async (score: Score, user: User, beatmap: Beatmap): Promise<number> => {
-    const { max_combo: maxCombo } = beatmap;
-    const {
-        max_combo: scoreCombo,
-        statistics: {
-            count_50: count50,
-            count_100: count100,
-            count_300: count300,
-            count_miss: misscount
-        }
-    } = score;
-
-    const comboPercentage = scoreCombo / maxCombo;
-    const badAccuracy = misscount + count50 * 8 + count100 * 2 * (count300 / maxCombo);
-    const accDiff = Math.floor(user['statistics'].hit_accuracy) - score.accuracy * 100;
-
-    return (accDiff * 1.2 * comboPercentage) / badAccuracy;
-};
+const config = new Conf<SnipeYourself.Config>();
+let clientId = config.get('clientId');
+let clientSecret = config.get('clientSecret');
 
 new Promise(async resolve => {
     var questions: inquirer.InputQuestion<any>[] = [];
@@ -161,16 +137,3 @@ new Promise(async resolve => {
             });
         });
 });
-
-namespace SnipeYourself {
-    export interface Score {
-        rebase: number;
-        beatmapUrl: string;
-        name: string;
-        difficulty: string;
-        accuracy: number;
-        rank: string;
-        maxCombo: number;
-        combo: number;
-    }
-}
