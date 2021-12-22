@@ -8,20 +8,23 @@ import type {
 
 export const logError = (...text: any[]) => console.log(chalk.bold(chalk.red('✘', ...text)));
 export const logSuccess = (...text: any[]) => console.log(chalk.bold(chalk.green('✓', ...text)));
+export const generateList = (list: any[]) => `\n${list.map(m => `• ${m}`).join('\n')}`;
 export const validModes = ['osu', 'mania', 'taiko', 'fruits'];
 
 export const schema: Schema<SnipeYourself.Config> = {
-    clientId: {
-        type: 'number',
-        description: "Your osu! OAuth Client's ID"
+    client_id: {
+        type: ['number', 'null'],
+        description: "Your osu! OAuth Client's ID",
+        default: null
     },
-    clientSecret: {
-        type: 'string',
-        description: "Your osu! OAuth Client's secret"
+    client_secret: {
+        type: ['string', 'null'],
+        description: "Your osu! OAuth Client's secret",
+        default: null
     }
 };
 
-export const redactedSettings: (keyof SnipeYourself.Config)[] = ['clientSecret'];
+export const redactedSettings: (keyof SnipeYourself.Config)[] = ['client_secret'];
 
 export const rankColours = {
     A: chalk.green,
@@ -64,7 +67,7 @@ export namespace SnipeYourself {
     }
 
     export interface Config {
-        clientId: number;
-        clientSecret: string;
+        client_id: number;
+        client_secret: string;
     }
 }

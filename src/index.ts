@@ -15,12 +15,15 @@ import {
     validModes,
     logSuccess,
     schema,
-    redactedSettings
+    redactedSettings,
+    generateList
 } from './utils.js';
 import { Command as Commander } from 'commander';
 
 // todo: cache map data for rebases
 // todo: colorise all tables
+// todo: command handler
+// todo: dedicated logger - ayano?
 
 const { version } = JSON.parse(
     fs.readFileSync(path.join(path.resolve(), 'package.json')).toString()
@@ -63,9 +66,9 @@ program
 
         if (!parsedMode) {
             return logError(
-                `"${mode}" is not a valid gamemode! Please choose one of the following:\n${validModes
-                    .map(m => `• ${m}`)
-                    .join('\n')}`
+                `"${mode}" is not a valid gamemode! Please choose one of the following: ${generateList(
+                    validModes
+                )}`
             );
         }
 
@@ -73,8 +76,8 @@ program
         const config = new Conf<SnipeYourself.Config>({
             schema
         });
-        let clientId = config.get('clientId');
-        let clientSecret = config.get('clientSecret');
+        let clientId = config.get('client_id');
+        let clientSecret = config.get('client_secret');
 
         new Promise(async resolve => {
             var questions: inquirer.InputQuestion<any>[] = [];
@@ -102,12 +105,12 @@ program
 
                 if (results['clientId']) {
                     clientId = parseInt(results['clientId']);
-                    config.set('clientId', clientId);
+                    config.set('client_id', clientId);
                 }
 
                 if (results['clientSecret']) {
                     clientSecret = results['clientSecret'];
-                    config.set('clientSecret', clientSecret);
+                    config.set('client_secret', clientSecret);
                 }
             }
 
@@ -125,11 +128,22 @@ program
                     title: 'Find the user on osu!',
                     task: async () => {
                         user = await osu.user.get(userId, parsedMode as any);
+
                         // @ts-ignore
                         if (user.hasOwnProperty('error')) {
                             throw new Error(
                                 `A valid user does not exist on osu! with the ID ${userId}`
                             );
+                        }
+
+                        if (
+                            Object.keys(user).length <= 1 &&
+                            String(user['authentication']).toLowerCase() === 'basic'
+                        ) {
+                            throw new Error(
+                                `Please check that your authentication details are correct in the config!`
+                            );
+                            // todo: prompt for new details?
                         }
                     }
                 },
@@ -233,25 +247,65 @@ program
 
 const config = program.command('config <subcommand>').description('modify the config');
 
-config.command('list').action(async () => {
-    const config = new Conf({ schema });
+config
+    .command('list')
+    .alias('view')
+    .description('list all of the available settings')
+    .action(async () => {
+        const config = new Conf({ schema });
 
-    // Output them
-    const { Table } = await import('console-table-printer');
-    const table = new Table();
+        // Output them
+        const { Table } = await import('console-table-printer');
+        const table = new Table();
 
-    Object.keys(config.store).forEach((k: keyof SnipeYourself.Config) => {
-        table.addRow({
-            Setting: k,
-            Value: redactedSettings.includes(k) ? '[redacted]' : config.get(k),
-            Description: schema[k].description
+        Object.keys(config.store).forEach((k: keyof SnipeYourself.Config) => {
+            const value = config.get(k);
+
+            table.addRow({
+                Setting: k,
+                Value: !value ? '[undefined]' : redactedSettings.includes(k) ? '[redacted]' : value,
+                Description: schema[k].description
+            });
         });
+
+        table.printTable();
     });
 
-    table.printTable();
-});
+config
+    .command('set')
+    .alias('update')
+    .argument('<setting>', 'the setting to update')
+    .argument('<value>', 'the value to update it with')
+    .description('update a setting with a new value')
+    .action((setting: keyof SnipeYourself.Config, value: string) => {
+        // todo: parse a lack of underscores
+        setting = setting.toLowerCase() as keyof SnipeYourself.Config;
 
-// todo: view command <option> [value]
+        // Ensure that the setting exists
+        if (![Object.keys(schema).find(k => k.toLowerCase() === setting.toLowerCase())]) {
+            return logError(
+                `"${setting}" is not a valid setting. Please choose one of the following: ${generateList(
+                    Object.keys(schema)
+                )}`
+            );
+        }
+
+        // Update the setting
+        const config = new Conf<SnipeYourself.Config>({ schema });
+        const type = schema[setting].type;
+
+        try {
+            config.set(setting, type.includes('number') ? parseInt(value) : value);
+        } catch (e) {
+            return logError(
+                `The value for "${setting}" must be a ${type[0].toLowerCase()}! Please try again!`
+            );
+        }
+
+        logSuccess(
+            `Successfully updated "${setting}" to ${type.includes('number') ? value : `"${value}"`}`
+        );
+    });
 // todo: set command <option> [value]
 
 config
