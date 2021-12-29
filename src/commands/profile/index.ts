@@ -3,8 +3,7 @@ import { ArgInput } from '@oclif/core/lib/interfaces';
 import isValidPath from 'is-valid-path';
 import fs from 'fs';
 import Logger from '../../Logger';
-import { validModes, schema, Config, Score, friendlyDays } from '../../constants';
-import Conf from 'conf';
+import { validModes, Score, friendlyDays } from '../../constants';
 import { fetchCredentials, fetchProfileId, rankTable, rebase } from '../../utils';
 import type {
     user_data as User,
@@ -29,7 +28,6 @@ export default class Profile extends Command {
 
     static flags = {
         console: Flags.boolean({
-            default: true,
             description: 'output the results to the console',
             char: 'c'
         }),
@@ -55,7 +53,6 @@ export default class Profile extends Command {
     ];
 
     async run() {
-        const config = new Conf<Config>({ schema });
         const { args, flags } = await this.parse(Profile);
 
         // Ensure that there was a query
@@ -71,14 +68,13 @@ export default class Profile extends Command {
         };
 
         // Default the output to the console
-        if (!outputConsole && !outputJson) outputConsole = true;
+        if (!outputConsole && !outputJson.enabled) outputConsole = true;
 
         if (outputJson.enabled) {
             // Ensure that the path inputted is valid
-            // todo: maybe create folders if they do not exist, or at least give the option to do so?
             if (!isValidPath(outputJson.path) || !fs.existsSync(outputJson.path)) {
                 return Logger.error(
-                    `"${outputJson.path}" is not a valid path! Please ensure that it exists, and that you have inputted it correctly!`
+                    `"${outputJson.path}" is not a valid folder! Please ensure that it exists, and that you have inputted it correctly!`
                 );
             }
         }
