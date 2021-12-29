@@ -3,10 +3,9 @@ import { ArgInput } from '@oclif/core/lib/interfaces';
 import isValidPath from 'is-valid-path';
 import fs from 'fs';
 import Logger from '../../Logger';
-import * as stringSimilarity from 'string-similarity';
 import { validModes, schema, Config, Score } from '../../constants';
 import Conf from 'conf';
-import { fetchCredentials, generateList, rebase } from '../../utils';
+import { fetchCredentials, rankTable, rebase } from '../../utils';
 import type {
     user_data as User,
     user_scores_object as UserScore
@@ -139,7 +138,7 @@ export default class Profile extends Command {
                             return {
                                 rebase: await rebase(score, user, beatmap),
                                 beatmapUrl: `https://osu.ppy.sh/b/${score.beatmap.id}`,
-                                name: score.beatmapset.title_unicode,
+                                name: score.beatmapset.title,
                                 difficulty: score.beatmap.version,
                                 accuracy: score.accuracy * 100,
                                 rank: score.rank,
@@ -163,7 +162,18 @@ export default class Profile extends Command {
         ])
             .run()
             .then(async () => {
-                console.log(scores);
+                const ranks = scores
+                    .map(score => score.rank)
+                    .filter((v, i, s) => s.indexOf(v) === i);
+
+                if (outputConsole) {
+                    if (ranks.includes('SH')) rankTable(scores, 'SH');
+                    if (ranks.includes('S')) rankTable(scores, 'S');
+                    if (ranks.includes('A')) rankTable(scores, 'A');
+                    if (ranks.includes('B')) rankTable(scores, 'B');
+                    if (ranks.includes('C')) rankTable(scores, 'C');
+                    if (ranks.includes('D')) rankTable(scores, 'D');
+                }
             });
     }
 }

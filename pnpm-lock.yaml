@@ -36,6 +36,7 @@ specifiers:
   osu-api-extended: 2.0.7
   shx: ^0.3.3
   string-similarity: ^4.0.4
+  terminal-link: 2.1.1
   ts-node: ^10.2.1
   tslib: ^2.3.1
   typescript: ^4.4.3
@@ -54,6 +55,7 @@ dependencies:
   listr: 0.14.3
   osu-api-extended: 2.0.7
   string-similarity: 4.0.4
+  terminal-link: 2.1.1
 
 devDependencies:
   '@commitlint/cli': 16.0.1_@types+node@16.11.17
@@ -6044,6 +6046,14 @@ packages:
       pinkie-promise: 2.0.1
       uuid: 2.0.3
     dev: true
+
+  /terminal-link/2.1.1:
+    resolution: {integrity: sha512-un0FmiRUQNr5PJqy9kP7c40F5BOfpGlYTrxonDChEZB7pzZxRNp/bt+ymiy9/npwXya9KH99nJ/GXFIiUkYGFQ==}
+    engines: {node: '>=8'}
+    dependencies:
+      ansi-escapes: 4.3.2
+      supports-hyperlinks: 2.2.0
+    dev: false
 
   /text-extensions/1.9.0:
     resolution: {integrity: sha512-wiBrwC1EhBelW12Zy26JeOUkQ5mRu+5o8rpsJk5+2t+Y5vE7e842qtZDQ2g1NpX/29HdyFeJ4nSIhI47ENSxlQ==}

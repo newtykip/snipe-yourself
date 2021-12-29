@@ -1,11 +1,14 @@
 import Conf from 'conf';
-import { Config, Credentials, schema } from './constants';
+import { Config, Credentials, rankColours, schema, Score } from './constants';
 import inquirer from 'inquirer';
 import {
     user_data as User,
     beatmaps_short_2_object as Beatmap,
-    user_scores_object as Score
+    user_scores_object as ApiScore
 } from 'osu-api-extended/dist/types/v2';
+import chalk from 'chalk';
+import link from 'terminal-link';
+import { Table } from 'console-table-printer';
 
 export const formatSetting = (setting: string) =>
     setting
@@ -60,7 +63,7 @@ export const fetchCredentials = async (): Promise<Credentials> => {
     };
 };
 
-export const rebase = async (score: Score, user: User, beatmap: Beatmap): Promise<number> => {
+export const rebase = async (score: ApiScore, user: User, beatmap: Beatmap): Promise<number> => {
     const { max_combo: maxCombo } = beatmap;
     const {
         max_combo: scoreCombo,
@@ -77,4 +80,24 @@ export const rebase = async (score: Score, user: User, beatmap: Beatmap): Promis
     const accDiff = Math.floor(user['statistics'].hit_accuracy) - score.accuracy * 100;
 
     return (accDiff * 1.2 * comboPercentage) / badAccuracy;
+};
+
+export const rankTable = (scores: Score[], rank: string) => {
+    const scoresOfRank = scores.filter(s => s.rank === rank).sort((a, b) => b.rebase - a.rebase);
+
+    const table = new Table();
+
+    console.log(chalk.bold(rankColours[rank.toUpperCase()](rank.substring(0))));
+
+    scoresOfRank.forEach(score =>
+        table.addRow({
+            'Beatmap Name': link(score.name, score.beatmapUrl),
+            Difficulty: score.difficulty,
+            'Rebase Value': score.rebase.toFixed(5),
+            Combo: `${score.combo}/${score.maxCombo}`,
+            Accuracy: `${score.accuracy.toFixed(2)}%`
+        })
+    );
+
+    table.printTable();
 };

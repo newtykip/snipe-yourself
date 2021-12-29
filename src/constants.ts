@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import type { Schema } from 'conf/dist/source';
 
 export interface Config {
@@ -49,3 +50,12 @@ export const schema: Schema<Config> = {
 export const redactedSettings: (keyof Config)[] = ['client_secret'];
 
 export const validModes = ['osu', 'mania', 'taiko', 'fruits'] as const;
+
+export const rankColours: { [key: string]: chalk.Chalk } = {
+    A: chalk.green,
+    B: chalk.blue,
+    C: chalk.magenta,
+    D: chalk.red,
+    S: chalk.yellow,
+    SH: chalk.gray
+};
