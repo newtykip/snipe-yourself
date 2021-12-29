@@ -4,7 +4,7 @@ import Conf from 'conf';
 import { Config, schema } from '../../constants';
 import Logger from '../../Logger';
 import inquirer from 'inquirer';
-import { closestSetting, formatSetting, generateList } from '../../utils';
+import { closestSetting, formatSetting } from '../../utils';
 
 export default class Reset extends Command {
     static description: string = 'reset the config!';

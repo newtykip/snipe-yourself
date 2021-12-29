@@ -1,41 +1,166 @@
-oclif-hello-world
-=================
+# snipe-yourself
 
-oclif example Hello World CLI
+Generate a report of your osu! chokes to snipe them with ease!
 
-[![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
-[![Version](https://img.shields.io/npm/v/oclif-hello-world.svg)](https://npmjs.org/package/oclif-hello-world)
-[![CircleCI](https://circleci.com/gh/oclif/hello-world/tree/main.svg?style=shield)](https://circleci.com/gh/oclif/hello-world/tree/main)
-[![Downloads/week](https://img.shields.io/npm/dw/oclif-hello-world.svg)](https://npmjs.org/package/oclif-hello-world)
-[![License](https://img.shields.io/npm/l/oclif-hello-world.svg)](https://github.com/oclif/hello-world/blob/main/package.json)
+[![Version](https://img.shields.io/npm/v/snipe-yourself.svg?style=for-the-badge)](https://npmjs.org/package/snipe-yourself)
+[![Downloads/week](https://img.shields.io/npm/dw/snipe-yourself.svg?style=for-the-badge)](https://npmjs.org/package/snipe-yourself)
+[![License](https://img.shields.io/npm/l/snipe-yourself.svg?style=for-the-badge)](https://github.com/newtykins/snipe-yourself/blob/main/package.json)
 
 <!-- toc -->
+* [snipe-yourself](#snipe-yourself)
 * [Usage](#usage)
 * [Commands](#commands)
 <!-- tocstop -->
+
 # Usage
+
 <!-- usage -->
 ```sh-session
 $ npm install -g snipe-yourself
 $ snipe COMMAND
 running command...
 $ snipe (--version)
-snipe-yourself/0.0.0 linux-x64 node-v16.13.1
+snipe-yourself/1.0.0 linux-x64 node-v16.13.1
 $ snipe --help [COMMAND]
 USAGE
   $ snipe COMMAND
 ...
 ```
 <!-- usagestop -->
+
 # Commands
+
 <!-- commands -->
+* [`snipe autocomplete [SHELL]`](#snipe-autocomplete-shell)
+* [`snipe commands`](#snipe-commands)
+* [`snipe config list`](#snipe-config-list)
+* [`snipe config reset [SETTING]`](#snipe-config-reset-setting)
+* [`snipe config set SETTING VALUE`](#snipe-config-set-setting-value)
 * [`snipe help [COMMAND]`](#snipe-help-command)
-* [`snipe plugins`](#snipe-plugins)
-* [`snipe plugins:inspect PLUGIN...`](#snipe-pluginsinspect-plugin)
-* [`snipe plugins:install PLUGIN...`](#snipe-pluginsinstall-plugin)
-* [`snipe plugins:link PLUGIN`](#snipe-pluginslink-plugin)
-* [`snipe plugins:uninstall PLUGIN...`](#snipe-pluginsuninstall-plugin)
-* [`snipe plugins update`](#snipe-plugins-update)
+* [`snipe profile [QUERY] [MODE]`](#snipe-profile-query-mode)
+
+## `snipe autocomplete [SHELL]`
+
+display autocomplete installation instructions
+
+```
+USAGE
+  $ snipe autocomplete [SHELL] [-r]
+
+ARGUMENTS
+  SHELL  shell type
+
+FLAGS
+  -r, --refresh-cache  Refresh cache (ignores displaying instructions)
+
+DESCRIPTION
+  display autocomplete installation instructions
+
+EXAMPLES
+  $ snipe autocomplete
+
+  $ snipe autocomplete bash
+
+  $ snipe autocomplete zsh
+
+  $ snipe autocomplete --refresh-cache
+```
+
+_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v1.0.0/src/commands/autocomplete/index.ts)_
+
+## `snipe commands`
+
+list all the commands
+
+```
+USAGE
+  $ snipe commands [-h] [-j] [--hidden] [--columns <value> | -x] [--sort <value>] [--filter <value>] [--output
+    csv|json|yaml |  | [--csv | --no-truncate]] [--no-header | ]
+
+FLAGS
+  -h, --help         Show CLI help.
+  -j, --json         display unfiltered api data in json format
+  -x, --extended     show extra columns
+  --columns=<value>  only show provided columns (comma-separated)
+  --csv              output is csv format [alias: --output=csv]
+  --filter=<value>   filter property by partial string matching, ex: name=foo
+  --hidden           show hidden commands
+  --no-header        hide table header from output
+  --no-truncate      do not truncate output to fit screen
+  --output=<option>  output in a more machine friendly format
+                     <options: csv|json|yaml>
+  --sort=<value>     property to sort by (prepend '-' for descending)
+
+DESCRIPTION
+  list all the commands
+```
+
+_See code: [@oclif/plugin-commands](https://github.com/oclif/plugin-commands/blob/v2.0.1/src/commands/commands.ts)_
+
+## `snipe config list`
+
+list all of the available settings!
+
+```
+USAGE
+  $ snipe config list
+
+DESCRIPTION
+  list all of the available settings!
+
+ALIASES
+  $ snipe config view
+
+EXAMPLES
+  $ snipe config list
+```
+
+## `snipe config reset [SETTING]`
+
+reset the config!
+
+```
+USAGE
+  $ snipe config reset [SETTING]
+
+ARGUMENTS
+  SETTING  the setting to clear
+
+DESCRIPTION
+  reset the config!
+
+ALIASES
+  $ snipe config clear
+
+EXAMPLES
+  $ snipe config reset
+```
+
+## `snipe config set SETTING VALUE`
+
+update a setting with a new value!
+
+```
+USAGE
+  $ snipe config set [SETTING] [VALUE]
+
+ARGUMENTS
+  SETTING  setting to update
+  VALUE    value to update the setting to
+
+DESCRIPTION
+  update a setting with a new value!
+
+ALIASES
+  $ snipe config update
+
+EXAMPLES
+  $ snipe config set client_id 11655
+
+  $ snipe config set secret your-epic-secret
+
+  $ snipe config set profile 16009610
+```
 
 ## `snipe help [COMMAND]`
 
@@ -57,149 +182,40 @@ DESCRIPTION
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.1.10/src/commands/help.ts)_
 
-## `snipe plugins`
+## `snipe profile [QUERY] [MODE]`
 
-List installed plugins.
-
-```
-USAGE
-  $ snipe plugins [--core]
-
-FLAGS
-  --core  Show core plugins.
-
-DESCRIPTION
-  List installed plugins.
-
-EXAMPLES
-  $ snipe plugins
-```
-
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v2.0.11/src/commands/plugins/index.ts)_
-
-## `snipe plugins:inspect PLUGIN...`
-
-Displays installation properties of a plugin.
+rate a profile's chokes in terms of fixability
 
 ```
 USAGE
-  $ snipe plugins:inspect PLUGIN...
+  $ snipe profile [QUERY] [MODE] [-c] [-j <value>] [-m osu|mania|taiko|fruits]
 
 ARGUMENTS
-  PLUGIN  [default: .] Plugin to inspect.
+  QUERY  the profile's ID or username
+  MODE   the chosen osu! gamemode
 
 FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
+  -c, --console    output the results to the console
+  -j, --json=path  output the results as JSON
+  -m, --mode=mode  the mode to calculate for
 
 DESCRIPTION
-  Displays installation properties of a plugin.
-
-EXAMPLES
-  $ snipe plugins:inspect myplugin
-```
-
-## `snipe plugins:install PLUGIN...`
-
-Installs a plugin into the CLI.
-
-```
-USAGE
-  $ snipe plugins:install PLUGIN...
-
-ARGUMENTS
-  PLUGIN  Plugin to install.
-
-FLAGS
-  -f, --force    Run yarn install with force flag.
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Installs a plugin into the CLI.
-
-  Can be installed from npm or a git url.
-
-  Installation of a user-installed plugin will override a core plugin.
-
-  e.g. If you have a core plugin that has a 'hello' command, installing a user-installed plugin with a 'hello' command
-  will override the core plugin implementation. This is useful if a user needs to update core plugin functionality in
-  the CLI without the need to patch and update the whole CLI.
+  rate a profile's chokes in terms of fixability
 
 ALIASES
-  $ snipe plugins add
+  $ snipe calculate
 
 EXAMPLES
-  $ snipe plugins:install myplugin 
+  $ snipe profile 16009610
 
-  $ snipe plugins:install https://github.com/someuser/someplugin
+  $ snipe profile 16009610 -j
 
-  $ snipe plugins:install someuser/someplugin
+  $ snipe profile 16009610 -c --json
+
+  $ snipe profile "Newt x3"
+
+  $ snipe profile
 ```
 
-## `snipe plugins:link PLUGIN`
-
-Links a plugin into the CLI for development.
-
-```
-USAGE
-  $ snipe plugins:link PLUGIN
-
-ARGUMENTS
-  PATH  [default: .] path to plugin
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Links a plugin into the CLI for development.
-
-  Installation of a linked plugin will override a user-installed or core plugin.
-
-  e.g. If you have a user-installed or core plugin that has a 'hello' command, installing a linked plugin with a 'hello'
-  command will override the user-installed or core plugin implementation. This is useful for development work.
-
-EXAMPLES
-  $ snipe plugins:link myplugin
-```
-
-## `snipe plugins:uninstall PLUGIN...`
-
-Removes a plugin from the CLI.
-
-```
-USAGE
-  $ snipe plugins:uninstall PLUGIN...
-
-ARGUMENTS
-  PLUGIN  plugin to uninstall
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Removes a plugin from the CLI.
-
-ALIASES
-  $ snipe plugins unlink
-  $ snipe plugins remove
-```
-
-## `snipe plugins update`
-
-Update installed plugins.
-
-```
-USAGE
-  $ snipe plugins update [-h] [-v]
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Update installed plugins.
-```
+_See code: [dist/commands/profile/index.ts](https://github.com/newtykins/snipe-yourself/blob/v1.0.0/dist/commands/profile/index.ts)_
 <!-- commandsstop -->

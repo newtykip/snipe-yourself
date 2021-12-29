@@ -11,6 +11,7 @@ import link from 'terminal-link';
 import { Table } from 'console-table-printer';
 import * as stringSimilarity from 'string-similarity';
 import Logger from './Logger';
+import { v2 as osu } from 'osu-api-extended';
 
 export const formatSetting = (setting: string) =>
     setting
@@ -71,13 +72,35 @@ export const fetchProfileId = async () => {
     let profileId = config.get('profile_id');
 
     if (!profileId) {
+        // Get an osu! instance logged in prepared
+        const { clientId, clientSecret } = await fetchCredentials();
+        osu.login(clientId, clientSecret);
+
         const results = await inquirer.prompt([
             {
                 name: 'profileId',
                 type: 'input',
                 message: 'Enter your osu! profile ID:',
-                validate: (value: any) =>
-                    isNaN(value) ? 'Your profile ID must be a number!' : true
+                // todo: support usernames
+                validate: async (value: any) => {
+                    if (isNaN(value)) return 'Your profile ID must be a number!';
+
+                    const user = await osu.user.get(value, 'osu', 'id');
+
+                    if (user.hasOwnProperty('error')) {
+                        return `A valid user does not exist on osu! with the ID ${value}`;
+                    }
+
+                    if (
+                        Object.keys(user).length <= 1 &&
+                        String(user['authentication']).toLowerCase() === 'basic'
+                    ) {
+                        return `Please check that your authentication details are correct in the config!`;
+                        // todo: prompt for new details?
+                    }
+
+                    return true;
+                }
             }
         ]);
 

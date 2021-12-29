@@ -17,6 +17,7 @@ import path from 'path';
 import dayjs from 'dayjs';
 import ord from 'ord';
 
+// todo: add the ability to calculate pp for a map
 export default class Profile extends Command {
     static description: string = "rate a profile's chokes in terms of fixability";
     static aliases: string[] = ['calculate'];
