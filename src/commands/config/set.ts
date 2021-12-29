@@ -1,10 +1,9 @@
 import { Command } from '@oclif/core';
 import { ArgInput } from '@oclif/core/lib/interfaces';
 import Conf from 'conf';
-import * as stringSimilarity from 'string-similarity';
 import { Config, schema } from '../../constants';
 import Logger from '../../Logger';
-import { formatSetting, generateList } from '../../utils';
+import { closestSetting as closestSetting, formatSetting, generateList } from '../../utils';
 
 export default class Set extends Command {
     static description: string = 'update a setting with a new value!';
@@ -26,21 +25,8 @@ export default class Set extends Command {
         const { args } = await this.parse(Set);
 
         // Find the closest key in the config
-        const { target: setting, rating } = stringSimilarity.findBestMatch(
-            args.setting,
-            Object.keys(schema)
-        ).bestMatch;
-
-        // Ensure that it is a good match
-        if (rating < config.get('autocorrect_confidence')) {
-            return Logger.warn(
-                `I'm not quite sure what you meant by "${
-                    args.setting
-                }", please make sure you choose an option from the list below: ${generateList(
-                    Object.keys(schema).map(k => formatSetting(k))
-                )}`
-            );
-        }
+        const setting = closestSetting(args.setting);
+        if (!setting) return;
 
         // Update the config
         const { value } = args;

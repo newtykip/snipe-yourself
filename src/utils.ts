@@ -9,6 +9,8 @@ import {
 import chalk from 'chalk';
 import link from 'terminal-link';
 import { Table } from 'console-table-printer';
+import * as stringSimilarity from 'string-similarity';
+import Logger from './Logger';
 
 export const formatSetting = (setting: string) =>
     setting
@@ -63,6 +65,31 @@ export const fetchCredentials = async (): Promise<Credentials> => {
     };
 };
 
+export const fetchProfileId = async () => {
+    // Read the current state of the config
+    const config = new Conf<Config>({ schema });
+    let profileId = config.get('profile_id');
+
+    if (!profileId) {
+        const results = await inquirer.prompt([
+            {
+                name: 'profileId',
+                type: 'input',
+                message: 'Enter your osu! profile ID:',
+                validate: (value: any) =>
+                    isNaN(value) ? 'Your profile ID must be a number!' : true
+            }
+        ]);
+
+        if (results?.['profileId']) {
+            profileId = parseInt(results?.['profileId']);
+            config.set('profile_id', profileId);
+        }
+    }
+
+    return profileId;
+};
+
 export const rebase = async (score: ApiScore, user: User, beatmap: Beatmap): Promise<number> => {
     const { max_combo: maxCombo } = beatmap;
     const {
@@ -100,4 +127,23 @@ export const rankTable = (scores: Score[], rank: string) => {
     );
 
     table.printTable();
+};
+
+export const closestSetting = (query: string): keyof Config => {
+    const config = new Conf<Config>({ schema });
+    const keys = Object.keys(schema);
+
+    // Find the closest key in the config
+    const { target, rating } = stringSimilarity.findBestMatch(query, keys).bestMatch;
+
+    // Ensure that it is a good match
+    if (rating < config.get('autocorrect_confidence')) {
+        Logger.warn(
+            `I'm not quite sure what you meant by "${query}", please make sure you choose an option from the list below: ${generateList(
+                keys.map(k => formatSetting(k))
+            )}`
+        );
+    }
+
+    return target as keyof Config;
 };

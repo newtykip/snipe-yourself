@@ -5,7 +5,7 @@ import fs from 'fs';
 import Logger from '../../Logger';
 import { validModes, schema, Config, Score } from '../../constants';
 import Conf from 'conf';
-import { fetchCredentials, rankTable, rebase } from '../../utils';
+import { fetchCredentials, fetchProfileId, rankTable, rebase } from '../../utils';
 import type {
     user_data as User,
     user_scores_object as UserScore
@@ -55,13 +55,7 @@ export default class Profile extends Command {
         const { args, flags } = await this.parse(Profile);
 
         // Ensure that there was a query
-        const query = args.query ?? config.get('profile_id');
-
-        if (!query) {
-            return Logger.error(
-                'You must either have an ID set in the config already, or provide a query to use this command! For more information, run snipe profile --help'
-            );
-        }
+        let query = args.query ?? (await fetchProfileId());
 
         const queryType: 'id' | 'username' = isNaN(parseInt(query)) ? 'username' : 'id';
 
