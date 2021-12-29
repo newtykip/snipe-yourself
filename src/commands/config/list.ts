@@ -6,13 +6,12 @@ import { formatSetting } from '../../utils';
 
 export default class List extends Command {
     static description: string = 'list all of the available settings!';
-
-    static aliases: string[] = ['view'];
+    static aliases: string[] = ['config view'];
 
     static examples: string[] = ['$ snipe config list'];
 
     async run() {
-        const config = new Conf({ schema });
+        const config = new Conf<Config>({ schema });
         const table = new Table();
 
         // Add settings to the table

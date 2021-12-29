@@ -2,20 +2,27 @@ import { Command } from '@oclif/core';
 import { ArgInput } from '@oclif/core/lib/interfaces';
 import Conf from 'conf';
 import * as stringSimilarity from 'string-similarity';
-import { schema } from '../../constants';
+import { Config, schema } from '../../constants';
 import Logger from '../../Logger';
 import { formatSetting, generateList } from '../../utils';
 
 export default class Set extends Command {
     static description: string = 'update a setting with a new value!';
+    static aliases: string[] = ['config update'];
 
     static args: ArgInput = [
         { name: 'setting', description: 'setting to update', required: true },
         { name: 'value', description: 'value to update the setting to', required: true }
     ];
 
+    static examples: string[] = [
+        '$ snipe config set client_id 11655',
+        '$ snipe config set secret your-epic-secret',
+        '$ snipe config set profile 16009610'
+    ];
+
     async run() {
-        const config = new Conf({ schema });
+        const config = new Conf<Config>({ schema });
         const { args } = await this.parse(Set);
 
         // Find the closest key in the config
@@ -25,7 +32,7 @@ export default class Set extends Command {
         ).bestMatch;
 
         // Ensure that it is a good match
-        if (rating < 0.2) {
+        if (rating < config.get('autocorrect_confidence')) {
             return Logger.warn(
                 `I'm not quite sure what you meant by "${
                     args.setting
