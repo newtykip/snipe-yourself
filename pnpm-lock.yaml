@@ -25,6 +25,7 @@ specifiers:
   eslint: ^7.32.0
   eslint-config-oclif: ^4
   eslint-config-oclif-typescript: ^1.0.2
+  figures: 3.2.0
   globby: ^11
   husky: ^7.0.4
   inquirer: ^8.2.0
@@ -51,6 +52,7 @@ dependencies:
   conf: 10.1.1
   console-table-printer: 2.10.0
   dayjs: 1.10.7
+  figures: 3.2.0
   inquirer: 8.2.0
   is-valid-path: 0.1.1
   listr: 0.14.3
