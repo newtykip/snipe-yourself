@@ -11,7 +11,9 @@ specifiers:
   '@types/chai': ^4
   '@types/mocha': ^9.0.0
   '@types/node': ^16.9.4
+  '@types/string-similarity': ^4.0.0
   chai: ^4
+  chalk: 4.1.2
   commitizen: ^4.2.4
   conf: ^10.1.1
   console-table-printer: ^2.10.0
@@ -24,6 +26,7 @@ specifiers:
   mocha: ^9
   oclif: ^2.0.0-main.10
   shx: ^0.3.3
+  string-similarity: ^4.0.4
   ts-node: ^10.2.1
   tslib: ^2.3.1
   typescript: ^4.4.3
@@ -33,8 +36,10 @@ dependencies:
   '@oclif/plugin-autocomplete': 1.0.0
   '@oclif/plugin-commands': 2.0.1
   '@oclif/plugin-help': 5.1.10
+  chalk: 4.1.2
   conf: 10.1.1
   console-table-printer: 2.10.0
+  string-similarity: 4.0.4
 
 devDependencies:
   '@commitlint/cli': 16.0.1_@types+node@16.11.17
@@ -43,6 +48,7 @@ devDependencies:
   '@types/chai': 4.3.0
   '@types/mocha': 9.0.0
   '@types/node': 16.11.17
+  '@types/string-similarity': 4.0.0
   chai: 4.3.4
   commitizen: 4.2.4_@types+node@16.11.17
   cz-conventional-changelog: 3.3.0_@types+node@16.11.17
@@ -856,6 +862,10 @@ packages:
     resolution: {integrity: sha512-6EF+wzMWvBNeGrfP3Nx60hhx+FfwSg1JJBLAAP/IdIUq0EYkqCYf70VT3PhuhPX9eLD+Dp+lNdpb/ZeHG8Yezg==}
     dependencies:
       '@sinonjs/fake-timers': 7.1.2
+    dev: true
+
+  /@types/string-similarity/4.0.0:
+    resolution: {integrity: sha512-dMS4S07fbtY1AILG/RhuwmptmzK1Ql8scmAebOTJ/8iBtK/KI17NwGwKzu1uipjj8Kk+3mfPxum56kKZE93mzQ==}
     dev: true
 
   /@typescript-eslint/eslint-plugin/4.33.0_3289a875d95a672b97ebf589745c66ef:
@@ -5516,6 +5526,10 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /string-similarity/4.0.4:
+    resolution: {integrity: sha512-/q/8Q4Bl4ZKAPjj8WerIBJWALKkaPRfrvhfF8k/B23i4nzrlRj2/go1m90In7nG/3XDSbOo0+pu6RvCTM9RGMQ==}
+    dev: false
 
   /string-template/0.2.1:
     resolution: {integrity: sha1-QpMuWYo1LQH8IuwzZ9nYTuxsmt0=}

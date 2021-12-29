@@ -2,11 +2,14 @@ import { Command } from '@oclif/core';
 import Conf from 'conf';
 import { Table } from 'console-table-printer';
 import { schema, Config, redactedSettings } from '../../constants';
+import { formatSetting } from '../../utils';
 
 export default class List extends Command {
-    static description = 'list all of the available settings!';
+    static description: string = 'list all of the available settings!';
 
-    static examples = ['$ snipe config list'];
+    static aliases: string[] = ['view'];
+
+    static examples: string[] = ['$ snipe config list'];
 
     async run() {
         const config = new Conf({ schema });
@@ -17,10 +20,7 @@ export default class List extends Command {
             const value = config.get(k);
 
             table.addRow({
-                Setting: k
-                    .split('_')
-                    .map(s => `${s.substring(0, 1).toUpperCase()}${s.substring(1)}`)
-                    .join(' '),
+                Setting: formatSetting(k),
                 Value: !value ? '[undefined]' : redactedSettings.includes(k) ? '[redacted]' : value,
                 Description: schema[k].description
             });

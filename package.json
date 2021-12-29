@@ -12,8 +12,10 @@
     "@oclif/plugin-autocomplete": "^1.0.0",
     "@oclif/plugin-commands": "^2.0.1",
     "@oclif/plugin-help": "^5",
+    "chalk": "4.1.2",
     "conf": "^10.1.1",
-    "console-table-printer": "^2.10.0"
+    "console-table-printer": "^2.10.0",
+    "string-similarity": "^4.0.4"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.0.1",
@@ -22,6 +24,7 @@
     "@types/chai": "^4",
     "@types/mocha": "^9.0.0",
     "@types/node": "^16.9.4",
+    "@types/string-similarity": "^4.0.0",
     "chai": "^4",
     "commitizen": "^4.2.4",
     "cz-conventional-changelog": "^3.3.0",
