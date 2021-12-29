@@ -2,7 +2,7 @@ import { Command } from '@oclif/core';
 import { ArgInput } from '@oclif/core/lib/interfaces';
 import Conf from 'conf';
 import * as stringSimilarity from 'string-similarity';
-import { Config, schema } from '../../constants';
+import { schema } from '../../constants';
 import Logger from '../../Logger';
 import { formatSetting, generateList } from '../../utils';
 
