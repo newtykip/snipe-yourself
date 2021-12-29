@@ -3,7 +3,7 @@ import { ArgInput } from '@oclif/core/lib/interfaces';
 import isValidPath from 'is-valid-path';
 import fs from 'fs';
 import Logger from '../../Logger';
-import { validModes, schema, Config, Score } from '../../constants';
+import { validModes, schema, Config, Score, friendlyDays } from '../../constants';
 import Conf from 'conf';
 import { fetchCredentials, fetchProfileId, rankTable, rebase } from '../../utils';
 import type {
@@ -13,6 +13,9 @@ import type {
 import Listr from 'listr';
 import { v2 as osu } from 'osu-api-extended';
 import Bluebird from 'bluebird';
+import path from 'path';
+import dayjs from 'dayjs';
+import ord from 'ord';
 
 export default class Profile extends Command {
     static description: string = "rate a profile's chokes in terms of fixability";
@@ -130,14 +133,17 @@ export default class Profile extends Command {
                             const beatmap = await osu.beatmap.get(score.beatmap.id);
 
                             return {
-                                rebase: await rebase(score, user, beatmap),
                                 beatmapUrl: `https://osu.ppy.sh/b/${score.beatmap.id}`,
+                                scoreUrl: `https://osu.ppy.sh/scores/${mode}/${score.id}`,
                                 name: score.beatmapset.title,
                                 difficulty: score.beatmap.version,
                                 accuracy: score.accuracy * 100,
                                 rank: score.rank,
+                                combo: score.max_combo,
                                 maxCombo: beatmap.max_combo,
-                                combo: score.max_combo
+                                mods: `+${score.mods.join('')}`,
+                                rebase: await rebase(score, user, beatmap),
+                                misses: score.statistics.count_miss
                             };
                         }
                     );
@@ -161,12 +167,45 @@ export default class Profile extends Command {
                     .filter((v, i, s) => s.indexOf(v) === i);
 
                 if (outputConsole) {
-                    if (ranks.includes('SH')) rankTable(scores, 'SH');
-                    if (ranks.includes('S')) rankTable(scores, 'S');
-                    if (ranks.includes('A')) rankTable(scores, 'A');
-                    if (ranks.includes('B')) rankTable(scores, 'B');
-                    if (ranks.includes('C')) rankTable(scores, 'C');
-                    if (ranks.includes('D')) rankTable(scores, 'D');
+                    ranks.forEach(rank => {
+                        const scoresOfRank = scores
+                            .filter(s => s.rank === rank)
+                            .sort((a, b) => b.rebase - a.rebase);
+                        rankTable(scoresOfRank, rank);
+                    });
+                }
+
+                if (outputJson.enabled) {
+                    ranks.forEach(rank => {
+                        const scoresOfRank = scores
+                            .filter(s => s.rank === rank)
+                            .sort((a, b) => b.rebase - a.rebase);
+
+                        const date = new Date();
+
+                        fs.writeFileSync(
+                            path.join(outputJson.path, `${rank.toUpperCase()}.json`),
+                            JSON.stringify(
+                                {
+                                    details: {
+                                        user: user.username,
+                                        userId: user.id,
+                                        rank: user['statistics'].global_rank,
+                                        pp: user['statistics'].pp,
+                                        playCount: user['statistics'].play_count,
+                                        calculatedOn: `${
+                                            friendlyDays[date.getDay()]
+                                        }, ${date.getDate()}${ord(date.getDate())} ${dayjs(
+                                            date
+                                        ).format('MMMM YYYY h:mma')}`
+                                    },
+                                    scores: scoresOfRank
+                                },
+                                null,
+                                4
+                            )
+                        );
+                    });
                 }
             });
     }

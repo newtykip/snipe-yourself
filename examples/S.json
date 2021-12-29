@@ -1,0 +1,25 @@
+{
+    "details": {
+        "user": "sakamata1",
+        "userId": 7562902,
+        "rank": 1,
+        "pp": 21650.6,
+        "playCount": 124219,
+        "calculatedOn": "Wednesday, 29th December 2021 2:18am"
+    },
+    "scores": [
+        {
+            "beatmapUrl": "https://osu.ppy.sh/b/2328680",
+            "scoreUrl": "https://osu.ppy.sh/scores/osu/3991223943",
+            "name": "ChuChu Lovely MuniMuni MuraMura PrinPrin Boron Nururu ReroRero (Chiptune Cover)",
+            "difficulty": "Reform's Extreme",
+            "accuracy": 96.32183908045977,
+            "rank": "S",
+            "combo": 439,
+            "maxCombo": 441,
+            "mods": "+DT",
+            "rebase": 0.10082746035741269,
+            "misses": 0
+        }
+    ]
+}

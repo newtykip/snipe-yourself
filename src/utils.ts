@@ -110,19 +110,17 @@ export const rebase = async (score: ApiScore, user: User, beatmap: Beatmap): Pro
 };
 
 export const rankTable = (scores: Score[], rank: string) => {
-    const scoresOfRank = scores.filter(s => s.rank === rank).sort((a, b) => b.rebase - a.rebase);
-
     const table = new Table();
 
     console.log(chalk.bold(rankColours[rank.toUpperCase()](rank.substring(0))));
 
-    scoresOfRank.forEach(score =>
+    scores.forEach(score =>
         table.addRow({
-            'Beatmap Name': link(score.name, score.beatmapUrl),
-            Difficulty: score.difficulty,
-            'Rebase Value': score.rebase.toFixed(5),
+            'Beatmap Name': link(`${score.name} [${score.difficulty}]`, score.beatmapUrl),
             Combo: `${score.combo}/${score.maxCombo}`,
-            Accuracy: `${score.accuracy.toFixed(2)}%`
+            Accuracy: `${score.accuracy.toFixed(2)}%`,
+            Mods: score.mods,
+            'Rebase Value': score.rebase.toFixed(5)
         })
     );
 

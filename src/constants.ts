@@ -22,6 +22,9 @@ export interface Score {
     rank: string;
     maxCombo: number;
     combo: number;
+    mods: string;
+    scoreUrl: string;
+    misses: number;
 }
 
 export const schema: Schema<Config> = {
@@ -50,6 +53,7 @@ export const schema: Schema<Config> = {
 export const redactedSettings: (keyof Config)[] = ['client_secret'];
 
 export const validModes = ['osu', 'mania', 'taiko', 'fruits'] as const;
+export const friendlyDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
 export const rankColours: { [key: string]: chalk.Chalk } = {
     A: chalk.green,
