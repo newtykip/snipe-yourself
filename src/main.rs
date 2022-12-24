@@ -1,6 +1,7 @@
 use clap::Parser;
 
 mod config;
+mod profile;
 
 #[derive(Parser, Debug)]
 #[clap(about, author, version)]
@@ -13,6 +14,9 @@ struct Value {
 enum Command {
     /// View or modify the config
     Config(config::Command),
+
+    /// Check a profile for snipable scores
+    Profile,
 }
 
 fn main() {
@@ -20,9 +24,11 @@ fn main() {
 
     match command {
         Command::Config(config::Command { subcommand }) => match subcommand {
-            config::Subcommand::List => println!("list!"),
+            config::Subcommand::List => config::list(),
             config::Subcommand::Set => println!("set"),
             config::Subcommand::Reset => println!("reset"),
         },
+
+        Command::Profile => profile::execute(),
     }
 }
