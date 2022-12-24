@@ -26,7 +26,7 @@ fn main() {
         Command::Config(config::Command { subcommand }) => match subcommand {
             config::Subcommand::List => config::list(),
             config::Subcommand::Set => println!("set"),
-            config::Subcommand::Reset => println!("reset"),
+            config::Subcommand::Reset => config::reset(),
         },
 
         Command::Profile => profile::execute(),
