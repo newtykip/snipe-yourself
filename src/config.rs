@@ -1,6 +1,12 @@
-use clap::Parser;
+use clap::{Args, Parser};
 use owo_colors::OwoColorize;
-use std::{fs::{self, File}, path::PathBuf, io::Write};
+use regex::Regex;
+use std::{
+    fs::{self, File},
+    io::Write,
+    ops::Deref,
+    path::PathBuf,
+};
 use titlecase::titlecase;
 
 const DEFAULT_CONFIG: &[u8] = b"client_id: 
@@ -19,10 +25,16 @@ pub(crate) enum Subcommand {
     List,
 
     /// Update the current config
-    Set,
+    Set(SetArgs),
 
     /// Reset the config to the default values
     Reset,
+}
+
+#[derive(Args, Debug)]
+pub(crate) struct SetArgs {
+    setting: String,
+    value: Option<String>,
 }
 
 fn get_path() -> PathBuf {
@@ -40,10 +52,18 @@ fn ensure_config_exists() {
     }
 }
 
+fn format_key(key: String) -> String {
+    titlecase(&key.replace("_", " "))
+}
+
+fn get_config() -> rusty_yaml::Yaml {
+    return rusty_yaml::Yaml::from(fs::read_to_string(get_path()).unwrap().as_str());
+}
+
 pub(crate) fn list() {
     ensure_config_exists();
 
-    let config = rusty_yaml::Yaml::from(fs::read_to_string(get_path()).unwrap().as_str());
+    let config = get_config();
 
     for key in config.get_section_names().unwrap() {
         let mut value = config.get_section(&key).unwrap().to_string();
@@ -52,9 +72,9 @@ pub(crate) fn list() {
             value = String::from("[N/A]").red().to_string();
         } else if key == "client_secret" {
             value = String::from("[redacted]").red().to_string();
-        } 
+        }
 
-        println!("{}: {}", titlecase(&key.replace("_", " ")).bold(), value);
+        println!("{}: {}", format_key(key).bold(), value);
     }
 }
 
@@ -62,12 +82,21 @@ pub(crate) fn reset() {
     ensure_config_exists();
 
     // Ask for confirmation first (:
-    let confirmed = requestty::prompt_one(requestty::Question::confirm("proceed")
-    .message("Are you sure you would like to reset your config?")
-    .build()).unwrap().as_bool().unwrap();
+    let confirmed = requestty::prompt_one(
+        requestty::Question::confirm("proceed")
+            .message("Are you sure you would like to reset your config?")
+            .build(),
+    )
+    .unwrap()
+    .as_bool()
+    .unwrap();
 
     if confirmed {
-        let mut file = fs::OpenOptions::new().write(true).truncate(true).open(get_path()).unwrap();
+        let mut file = fs::OpenOptions::new()
+            .write(true)
+            .truncate(true)
+            .open(get_path())
+            .unwrap();
 
         file.write(DEFAULT_CONFIG).unwrap();
         drop(file);
@@ -76,4 +105,48 @@ pub(crate) fn reset() {
     } else {
         println!("{}", "Reset cancelled!".green())
     }
+}
+
+pub(crate) fn set(args: SetArgs) {
+    let config = get_config();
+    let mut option = args.setting.clone();
+
+    // Try and figure out what setting the user was trying to update
+    if !config.has_section(&option) {
+        let sections = config.get_section_names().unwrap();
+        let settings = sections.iter().map(|x| x.deref()).collect::<Vec<&str>>();
+        let (matched, _) = rust_fuzzy_search::fuzzy_search_best_n(&option, &settings, 1)[0];
+
+        let confirmed =
+            requestty::prompt_one(requestty::Question::confirm("proceed").message(format!(
+                "Setting \"{}\" does not exist. Did you mean {}?",
+                &option, format_key(matched.to_string())
+            )))
+            .unwrap()
+            .as_bool()
+            .unwrap();
+
+        if confirmed {
+            option = matched.to_string();
+        } else {
+            std::process::exit(1);
+        }
+    }
+
+    // Update the option
+    let re = Regex::new(format!("{option}:.*").as_str()).unwrap();
+    let original_content = config.to_string();
+    let new_value = args.value.unwrap_or(String::new());
+    let new_contents = re.replace(&original_content.as_str(), format!("{option}: {}", new_value));
+
+    let mut file = fs::OpenOptions::new()
+        .write(true)
+        .truncate(true)
+        .open(get_path())
+        .unwrap();
+
+    file.write_all(new_contents.as_bytes()).unwrap();
+    file.flush().unwrap();
+
+    println!("Successfully updated {} to {}!", format_key(option).bold(), if new_value == "" { String::from("[N/A]").red().bold().to_string() } else { new_value.bold().to_string() });
 }

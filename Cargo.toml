@@ -9,6 +9,8 @@ edition = "2021"
 clap = { version = "4.0.32", features = ["derive"] }
 dirs = "4.0.0"
 owo-colors = "3.5.0"
+regex = "1.7.1"
 requestty = "0.5.0"
+rust-fuzzy-search = "0.1.1"
 rusty-yaml = "0.4.3"
 titlecase = "2.2.1"
