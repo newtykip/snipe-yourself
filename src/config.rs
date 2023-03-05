@@ -1,11 +1,11 @@
 use clap::{Args, Parser};
 use owo_colors::OwoColorize;
 use regex::Regex;
+use snipe_yourself::{config_path, read_config};
 use std::{
     fs::{self, File},
     io::Write,
     ops::Deref,
-    path::PathBuf,
 };
 use titlecase::titlecase;
 
@@ -37,12 +37,8 @@ pub(crate) struct SetArgs {
     value: Option<String>,
 }
 
-fn get_path() -> PathBuf {
-    return dirs::config_dir().unwrap().join("snipe-yourself.yml");
-}
-
 fn ensure_config_exists() {
-    let path = get_path();
+    let path = config_path();
 
     if !path.exists() {
         let mut file = File::create(path).unwrap();
@@ -56,14 +52,10 @@ fn format_key(key: String) -> String {
     titlecase(&key.replace("_", " "))
 }
 
-fn get_config() -> rusty_yaml::Yaml {
-    return rusty_yaml::Yaml::from(fs::read_to_string(get_path()).unwrap().as_str());
-}
-
 pub(crate) fn list() {
     ensure_config_exists();
 
-    let config = get_config();
+    let config = read_config();
 
     for key in config.get_section_names().unwrap() {
         let mut value = config.get_section(&key).unwrap().to_string();
@@ -95,7 +87,7 @@ pub(crate) fn reset() {
         let mut file = fs::OpenOptions::new()
             .write(true)
             .truncate(true)
-            .open(get_path())
+            .open(config_path())
             .unwrap();
 
         file.write(DEFAULT_CONFIG).unwrap();
@@ -108,7 +100,7 @@ pub(crate) fn reset() {
 }
 
 pub(crate) fn set(args: SetArgs) {
-    let config = get_config();
+    let config = read_config();
     let mut option = args.setting.clone();
 
     // Try and figure out what setting the user was trying to update
@@ -120,7 +112,8 @@ pub(crate) fn set(args: SetArgs) {
         let confirmed =
             requestty::prompt_one(requestty::Question::confirm("proceed").message(format!(
                 "Setting \"{}\" does not exist. Did you mean {}?",
-                &option, format_key(matched.to_string())
+                &option,
+                format_key(matched.to_string())
             )))
             .unwrap()
             .as_bool()
@@ -137,16 +130,27 @@ pub(crate) fn set(args: SetArgs) {
     let re = Regex::new(format!("{option}:.*").as_str()).unwrap();
     let original_content = config.to_string();
     let new_value = args.value.unwrap_or(String::new());
-    let new_contents = re.replace(&original_content.as_str(), format!("{option}: {}", new_value));
+    let new_contents = re.replace(
+        &original_content.as_str(),
+        format!("{option}: {}", new_value),
+    );
 
     let mut file = fs::OpenOptions::new()
         .write(true)
         .truncate(true)
-        .open(get_path())
+        .open(config_path())
         .unwrap();
 
     file.write_all(new_contents.as_bytes()).unwrap();
     file.flush().unwrap();
 
-    println!("Successfully updated {} to {}!", format_key(option).bold(), if new_value == "" { String::from("[N/A]").red().bold().to_string() } else { new_value.bold().to_string() });
+    println!(
+        "Successfully updated {} to {}!",
+        format_key(option).bold(),
+        if new_value == "" {
+            String::from("[N/A]").red().bold().to_string()
+        } else {
+            new_value.bold().to_string()
+        }
+    );
 }
