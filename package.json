@@ -35,7 +35,7 @@
         "@types/is-valid-path": "^0.1.0",
         "@types/listr": "^0.14.4",
         "@types/node": "^16.9.4",
-        "@types/string-similarity": "^4.0.0",
+        "@types/string-similarity": "^4.0.2",
         "chai": "^4",
         "commitizen": "^4.2.4",
         "cz-conventional-changelog": "^3.3.0",
