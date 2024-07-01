@@ -41,7 +41,7 @@
         "cz-conventional-changelog": "^3.3.0",
         "eslint": "^7.32.0",
         "eslint-config-oclif": "^4",
-        "eslint-config-oclif-typescript": "^1.0.2",
+        "eslint-config-oclif-typescript": "^3.1.8",
         "globby": "^11",
         "husky": "^7.0.4",
         "makensis": "^1.1.1",
